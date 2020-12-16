@@ -135,6 +135,29 @@
     [_resetButton setImage:[TOCropToolbar resetImage] forState:UIControlStateNormal];
     [_resetButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_resetButton];
+
+    [self.resetButton setImage:nil forState:UIControlStateNormal];
+    [self.resetButton setTitle:@"元に戻す" forState:UIControlStateNormal];
+    [self.resetButton setTitle:@"元に戻す" forState:UIControlStateDisabled];
+    [self.resetButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.resetButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
+    [self.resetButton setContentEdgeInsets:UIEdgeInsetsMake(15, 15, 15, 15)];
+
+    [self.doneIconButton setImage:nil forState:UIControlStateNormal];
+    [self.doneIconButton setTitle:@"登録" forState:UIControlStateNormal];
+    [self.doneIconButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.doneIconButton setContentEdgeInsets:UIEdgeInsetsMake(15, 15, 15, 15)];
+    [self.doneTextButton setTitle:@"登録" forState:UIControlStateNormal];
+    [self.doneTextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.doneTextButton setContentEdgeInsets:UIEdgeInsetsMake(15, 15, 15, 15)];
+
+    [self.cancelIconButton setImage:nil forState:UIControlStateNormal];
+    [self.cancelIconButton setTitle:@"キャンセル" forState:UIControlStateNormal];
+    [self.cancelIconButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.cancelIconButton setContentEdgeInsets:UIEdgeInsetsMake(15, 15, 15, 15)];
+    [self.cancelTextButton setTitle:@"キャンセル" forState:UIControlStateNormal];
+    [self.cancelTextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.cancelTextButton setContentEdgeInsets:UIEdgeInsetsMake(15, 15, 15, 15)];
 }
 
 - (void)layoutSubviews
@@ -272,6 +295,48 @@
         
         [self layoutToolbarButtons:buttonsInOrderVertically withSameButtonSize:buttonSize inContainerRect:containerRect horizontally:NO];
     }
+
+    for (UIButton* button in @[self.resetButton, self.doneIconButton, self.doneTextButton, self.cancelIconButton, self.cancelTextButton]) {
+        [button sizeToFit];
+    }
+
+    if (verticalLayout) {
+        self.resetButton.frame = ^{
+            CGRect frame = self.resetButton.frame;
+            frame.origin.x = 0;
+            frame.origin.y = (self.bounds.size.height - frame.size.height) / 2;
+            return frame;
+        }();
+        self.doneIconButton.frame = ^{
+            CGRect frame = self.doneIconButton.frame;
+            frame.origin.x = 0;
+            frame.origin.y = 20;
+            return frame;
+        }();
+        self.cancelIconButton.frame = ^{
+            CGRect frame = self.cancelIconButton.frame;
+            frame.origin.x = 0;
+            frame.origin.y = self.bounds.size.height - frame.size.height;
+            return frame;
+        }();
+    } else {
+        self.resetButton.frame = ^{
+            CGRect frame = self.resetButton.frame;
+            frame.origin.x = (self.bounds.size.width - frame.size.width) / 2;
+            frame.origin.y = 0;
+            return frame;
+        }();
+    }
+}
+
+- (CGFloat)heightThatFits {
+    CGFloat height = 0;
+    BOOL verticalLayout = (CGRectGetWidth(self.bounds) < CGRectGetHeight(self.bounds));
+    for (UIButton* button in @[self.resetButton, self.doneIconButton, self.doneTextButton, self.cancelIconButton, self.cancelTextButton]) {
+        CGSize size = [button sizeThatFits:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
+        height = MAX(height, (verticalLayout ? size.width : size.height));
+    }
+    return height;
 }
 
 // The convenience method for calculating button's frame inside of the container rect

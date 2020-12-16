@@ -81,6 +81,8 @@ NS_ASSUME_NONNULL_BEGIN
 /* Done button frame for popover controllers */
 @property (nonatomic, readonly) CGRect doneButtonFrame;
 
+- (CGFloat)heightThatFits;
+
 @end
 
 NS_ASSUME_NONNULL_END
